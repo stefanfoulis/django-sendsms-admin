@@ -8,7 +8,7 @@ setup(
     url='http://github.com/stefanfoulis/django-sendsms-admin',
     license='BSD',
     platforms=['OS Independent'],
-    description="An database delivery backend for django-sendsms (for debugging).",
+    description="A database delivery backend for django-sendsms (for debugging).",
     long_description=open('README.rst').read(),
     author='Stefan Foulis',
     author_email='stefan.foulis@gmail.com',
