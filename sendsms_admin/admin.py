@@ -4,7 +4,6 @@ from django.contrib import admin
 from django import forms
 from sendsms import message
 from sendsms_admin.models import SmsMessage
-from sendsms_admin.backend import DatabaseSmsBackend
 from sendsms import api
 from django.utils.translation import ugettext as _
 
@@ -44,9 +43,6 @@ class SendSmsMessageAdmin(admin.ModelAdmin):
             to=[t.strip() for t in obj.to_phones.split(',')],
             flash=obj.flash)
         sms_message.send()
-        connection = api.get_connection()
-        if not isinstance(connection, DatabaseSmsBackend):
-            DatabaseSmsBackend().send_messages([sms_message])
 
 
 
