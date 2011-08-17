@@ -1,9 +1,9 @@
 #-*- coding: utf-8 -*-
 from django.http import HttpResponseRedirect
 from django.contrib import admin
+from django import forms
 from sendsms import message
 from sendsms_admin.models import SmsMessage
-from sendsms_admin.backend import DatabaseSmsBackend
 from sendsms import api
 from django.utils.translation import ugettext as _
 
@@ -25,8 +25,15 @@ class SendSmsMessage(SmsMessage):
     class Meta:
         proxy = True
 
+class SendSmsMessageForm(forms.ModelForm):
+    class Meta:
+        model = SendSmsMessage
+        widgets = {
+            'to_phones': forms.TextInput(attrs={'size': '80'}),
+        }
 
 class SendSmsMessageAdmin(admin.ModelAdmin):
+    form = SendSmsMessageForm
     def save_model(self, request, obj, form, change):
         """
         sends the message and does not save it.
@@ -36,9 +43,6 @@ class SendSmsMessageAdmin(admin.ModelAdmin):
             to=[t.strip() for t in obj.to_phones.split(',')],
             flash=obj.flash)
         sms_message.send()
-        connection = api.get_connection()
-        if not isinstance(connection, DatabaseSmsBackend):
-            DatabaseSmsBackend().send_messages([sms_message])
 
 
 
